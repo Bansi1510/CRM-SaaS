@@ -1,34 +1,19 @@
-import sql from "mssql";
+import postgres from "postgres";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({});
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) throw new Error("DATABASE_URL missing");
 
-const config = {
-  server: "localhost",
-  port: 1433,
-  database: "crm",
-  user: "crm_user",
-  password: "crm@123",
-  options: {
-    encrypt: false,
-    trustServerCertificate: true,
-  },
-};
+const sql = postgres(connectionString);
 
-
-let pool: sql.ConnectionPool;
-
-export const connectDB = async (): Promise<sql.ConnectionPool> => {
+export const connectDB = async () => {
   try {
-    if (!pool) {
-      pool = await sql.connect(config);
-      console.log("✅ SQL Server connected");
-    }
-    return pool;
-  } catch (error) {
-    console.error("❌ SQL Server connection failed");
-    console.error(error);
-    process.exit(1);
+    await sql`select 1`;
+    console.log("✅ Database connected");
+  } catch (err) {
+    console.error("❌ Database connection failed");
+    throw err;
   }
 };
 
-export { sql };
+export default sql;

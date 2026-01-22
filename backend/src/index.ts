@@ -1,7 +1,9 @@
-import { connectDB } from "./config/db.ts";
-import app from "./server.ts";
-
-const PORT = process.env.PORT || 2005;
+import { connectDB } from "./config/db.js";
+import app from "./server.js";
+import dotenv from "dotenv";
+dotenv.config()
+ 
+const PORT = process.env.PORT ||2005;
 
 const startServer = async () => {
   try {

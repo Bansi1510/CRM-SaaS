@@ -5,14 +5,14 @@ import AuthRouter from "./routes/auth.routes.js";
 import TenatRouter from "./routes/tenat.routes.js";
 const app = express();
 
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
- 
 
-app.use("/api/auth",AuthRouter);
-app.use("/api/tenat",TenatRouter);
+
+app.use("/api/auth", AuthRouter);
+app.use("/api/tenant", TenatRouter);
 
 export default app;

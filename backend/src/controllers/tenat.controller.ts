@@ -62,3 +62,49 @@ export const getTenantById = async (req: Request, res: Response) => {
     });
   }
 };
+export const updateTenant = async (req: Request, res: Response) => {
+  try {
+    const { tenant_id } = req.params;
+    const { name, status } = req.body;
+    if (!tenant_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Tenant ID is required",
+      });
+    }
+    if (!name && !status) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one field is required to update",
+      });
+    }
+
+    const [tenant] = await sql`
+      UPDATE tenants
+      SET
+        name = COALESCE(${name}, name),
+        status = COALESCE(${status}, status)
+      WHERE tenant_id = ${tenant_id}
+      RETURNING *;
+    `;
+
+    if (!tenant) {
+      return res.status(404).json({
+        success: false,
+        message: "Tenant not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Tenant updated successfully",
+      data: tenant,
+    });
+  } catch (error) {
+    console.error("updateTenant Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};

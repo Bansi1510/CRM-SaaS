@@ -7,6 +7,6 @@ const AuthRouter = express.Router();
 AuthRouter.post("/super-admin/login", LoginSuperAdmin);
 AuthRouter.post("/tenant-admin/create", isSuperAdmin, RegisterTenantAdmin);
 AuthRouter.post("/tenant-admin/login", Login);
-AuthRouter.get("/logout", Logout);
+AuthRouter.post("/logout", Logout);
 
 export default AuthRouter;

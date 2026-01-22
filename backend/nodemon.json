@@ -2,9 +2,6 @@
   "watch": [
     "src"
   ],
-  "ignore": [
-    "src/**/*/spex.ts"
-  ],
-  "ext": "ts,html,css,ejs,json",
-  "exec": "ts-node ./src/index.ts"
+  "ext": "ts,json",
+  "exec": "node --loader ts-node/esm src/index.ts"
 }

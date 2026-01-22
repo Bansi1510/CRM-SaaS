@@ -1,9 +1,9 @@
 import { type Request, type Response } from "express";
 import bcrypt from "bcrypt";
-import sql from "../config/db.ts"; // your postgres.js instance
+import sql from "../config/db.js"; // your postgres.js instance
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // set in .env
+const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; 
 
 export const LoginSuperAdmin = async (req: Request, res: Response) => {
   try {
@@ -32,12 +32,17 @@ export const LoginSuperAdmin = async (req: Request, res: Response) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { super_admin_id: admin.super_admin_id, email: admin.email },
+      { super_admin_id: admin.super_admin_id, email: admin.email,role:"super_admin" },
       JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    // Respond with token
+   res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000,
+    });
     return res.status(200).json({
       message: "Login successful",
       token,
@@ -45,6 +50,7 @@ export const LoginSuperAdmin = async (req: Request, res: Response) => {
         super_admin_id: admin.super_admin_id,
         name: admin.name,
         email: admin.email,
+        role:"super_admin"
       },
     });
   } catch (error) {
@@ -52,3 +58,13 @@ export const LoginSuperAdmin = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
+// export const RegisterTenantAdmin=async(req:Request,res:Response)=>{
+//   try {
+//     const {}
+//   } catch (error) {
+//      console.error("LoginSuperAdmin Error:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// }

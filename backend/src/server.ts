@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors";
 import AuthRouter from "./routes/auth.routes.js";
 import TenatRouter from "./routes/tenat.routes.js";
+import UserRouter from "./routes/user.routes.js";
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -14,5 +15,6 @@ app.use(cors());
 
 app.use("/api/auth", AuthRouter);
 app.use("/api/tenant", TenatRouter);
+app.use("/api/user", UserRouter);
 
 export default app;
